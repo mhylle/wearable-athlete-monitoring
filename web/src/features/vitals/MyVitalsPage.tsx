@@ -12,13 +12,15 @@ interface MetricConfig {
   color: string;
 }
 
+const TIME_METRICS = new Set(["sleep_total", "sleep_light"]);
+
 const METRIC_CONFIGS: MetricConfig[] = [
   { key: "heart_rate", label: "Heart Rate", unit: "bpm", color: "#ef4444" },
   { key: "hrv_rmssd", label: "HRV (RMSSD)", unit: "ms", color: "#8b5cf6" },
   { key: "resting_hr", label: "Resting HR", unit: "bpm", color: "#f97316" },
   { key: "steps", label: "Steps", unit: "steps", color: "#22c55e" },
-  { key: "sleep_total", label: "Sleep Total", unit: "min", color: "#3b82f6" },
-  { key: "sleep_light", label: "Sleep Light", unit: "min", color: "#a78bfa" },
+  { key: "sleep_total", label: "Sleep Total", unit: "", color: "#3b82f6" },
+  { key: "sleep_light", label: "Sleep Light", unit: "", color: "#a78bfa" },
   { key: "spo2", label: "SpO2", unit: "%", color: "#06b6d4" },
   { key: "vo2_max", label: "VO2 Max", unit: "ml/kg/min", color: "#ec4899" },
 ];
@@ -35,6 +37,7 @@ function VitalCard({ athleteId, config }: { athleteId: string; config: MetricCon
         label={config.label}
         unit={config.unit}
         color={config.color}
+        isTime={TIME_METRICS.has(config.key)}
       />
     </section>
   );

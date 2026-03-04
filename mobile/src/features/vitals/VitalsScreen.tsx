@@ -29,13 +29,23 @@ interface MetricConfig {
   color: string;
 }
 
+const TIME_METRICS = new Set(['sleep_total', 'sleep_light']);
+
+function formatMinutes(minutes: number): string {
+  const totalSeconds = Math.round(minutes * 60);
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = totalSeconds % 60;
+  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+}
+
 const METRIC_CONFIGS: MetricConfig[] = [
   { key: 'heart_rate', label: 'Heart Rate', unit: 'bpm', color: '#ef4444' },
   { key: 'hrv_rmssd', label: 'HRV (RMSSD)', unit: 'ms', color: '#8b5cf6' },
   { key: 'resting_hr', label: 'Resting HR', unit: 'bpm', color: '#f97316' },
   { key: 'steps', label: 'Steps', unit: 'steps', color: '#22c55e' },
-  { key: 'sleep_total', label: 'Sleep Total', unit: 'min', color: '#3b82f6' },
-  { key: 'sleep_light', label: 'Sleep Light', unit: 'min', color: '#a78bfa' },
+  { key: 'sleep_total', label: 'Sleep Total', unit: '', color: '#3b82f6' },
+  { key: 'sleep_light', label: 'Sleep Light', unit: '', color: '#a78bfa' },
   { key: 'spo2', label: 'SpO2', unit: '%', color: '#06b6d4' },
   { key: 'vo2_max', label: 'VO2 Max', unit: 'ml/kg/min', color: '#ec4899' },
 ];
@@ -69,6 +79,10 @@ function MetricCard({ config, available }: { config: MetricConfig; available: bo
   const minVal = Math.min(...points.map((p: DailyMetricDataPoint) => p.min));
   const maxVal = Math.max(...points.map((p: DailyMetricDataPoint) => p.max));
 
+  const isTime = TIME_METRICS.has(config.key);
+  const fmtVal = (v: number) =>
+    isTime ? formatMinutes(v) : `${v.toFixed(config.key === 'steps' ? 0 : 1)} ${config.unit}`;
+
   // Show at most 14 labels on x-axis
   const labels = points.map((p: DailyMetricDataPoint) => {
     const d = new Date(p.date);
@@ -81,7 +95,7 @@ function MetricCard({ config, available }: { config: MetricConfig; available: bo
       <View style={styles.cardHeader}>
         <Text style={styles.cardTitle}>{config.label}</Text>
         <Text style={[styles.latestValue, { color: config.color }]}>
-          {latest.avg.toFixed(config.key === 'steps' ? 0 : 1)} {config.unit}
+          {fmtVal(latest.avg)}
         </Text>
       </View>
 
@@ -108,12 +122,8 @@ function MetricCard({ config, available }: { config: MetricConfig; available: bo
       />
 
       <View style={styles.minMaxRow}>
-        <Text style={styles.minMaxText}>
-          Min: {minVal.toFixed(config.key === 'steps' ? 0 : 1)} {config.unit}
-        </Text>
-        <Text style={styles.minMaxText}>
-          Max: {maxVal.toFixed(config.key === 'steps' ? 0 : 1)} {config.unit}
-        </Text>
+        <Text style={styles.minMaxText}>Min: {fmtVal(minVal)}</Text>
+        <Text style={styles.minMaxText}>Max: {fmtVal(maxVal)}</Text>
       </View>
     </View>
   );

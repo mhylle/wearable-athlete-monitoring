@@ -19,13 +19,15 @@ import { ZoneBadge } from "@/components/ui/ZoneBadge";
 import { MetricValue } from "@/components/ui/MetricValue";
 import { AnomalyCard } from "@/components/ui/AnomalyCard";
 
+const TIME_METRICS = new Set(["sleep_total", "sleep_light"]);
+
 const VITALS_CONFIGS = [
   { key: "heart_rate", label: "Heart Rate", unit: "bpm", color: "#ef4444" },
   { key: "hrv_rmssd", label: "HRV (RMSSD)", unit: "ms", color: "#8b5cf6" },
   { key: "resting_hr", label: "Resting HR", unit: "bpm", color: "#f97316" },
   { key: "steps", label: "Steps", unit: "steps", color: "#22c55e" },
-  { key: "sleep_total", label: "Sleep Total", unit: "min", color: "#3b82f6" },
-  { key: "sleep_light", label: "Sleep Light", unit: "min", color: "#a78bfa" },
+  { key: "sleep_total", label: "Sleep Total", unit: "", color: "#3b82f6" },
+  { key: "sleep_light", label: "Sleep Light", unit: "", color: "#a78bfa" },
   { key: "spo2", label: "SpO2", unit: "%", color: "#06b6d4" },
   { key: "vo2_max", label: "VO2 Max", unit: "ml/kg/min", color: "#ec4899" },
 ];
@@ -43,7 +45,7 @@ function VitalCard({ athleteId, metricKey, label, unit, color }: {
   return (
     <section className="rounded-xl border border-gray-200 bg-white p-5">
       <h2 className="mb-4 text-sm font-semibold text-gray-900">{label} (30-day)</h2>
-      <MetricLineChart data={points} label={label} unit={unit} color={color} />
+      <MetricLineChart data={points} label={label} unit={unit} color={color} isTime={TIME_METRICS.has(metricKey)} />
     </section>
   );
 }

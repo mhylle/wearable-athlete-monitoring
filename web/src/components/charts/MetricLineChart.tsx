@@ -21,9 +21,18 @@ interface MetricLineChartProps {
   label: string;
   unit: string;
   color: string;
+  isTime?: boolean;
 }
 
-export function MetricLineChart({ data, label, unit, color }: MetricLineChartProps) {
+function formatMinutes(minutes: number): string {
+  const totalSeconds = Math.round(minutes * 60);
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = totalSeconds % 60;
+  return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+}
+
+export function MetricLineChart({ data, label, unit, color, isTime }: MetricLineChartProps) {
   if (!data || data.length === 0) {
     return (
       <p className="py-8 text-center text-sm text-gray-400">
@@ -52,7 +61,12 @@ export function MetricLineChart({ data, label, unit, color }: MetricLineChartPro
         <XAxis dataKey="date" tick={{ fontSize: 11 }} />
         <YAxis tick={{ fontSize: 11 }} />
         <Tooltip
-          formatter={(value) => [`${Number(value).toFixed(1)} ${unit}`, ""]}
+          formatter={(value) => [
+            isTime
+              ? formatMinutes(Number(value))
+              : `${Number(value).toFixed(1)} ${unit}`,
+            "",
+          ]}
           labelStyle={{ fontWeight: 600 }}
         />
         <Area
