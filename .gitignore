@@ -1,0 +1,70 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment
+.env
+!.env.example
+
+# Docker
+docker-compose.override.yml
+
+# Logs
+logs/
+*.log
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Node
+node_modules/
+web/node_modules/
+mobile/node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Android build artifacts
+mobile/android/app/build/
+mobile/android/build/
+mobile/android/.gradle/
+mobile/android/app/src/main/assets/index.android.bundle
+*.apk
+*.aab
+
+# Expo
+mobile/.expo/
+
+# Screenshots (verification artifacts)
+*.png
+!mobile/android/app/src/main/res/**/*.png
+!web/src/**/*.png
+
+# Celery
+celerybeat-schedule
+backend/celerybeat-schedule
+
+# Gradle wrapper jar
+mobile/android/gradle/wrapper/gradle-wrapper.jar
+
+# Open Wearables (subproject)
+open-wearables/

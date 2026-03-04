@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "Athlete Monitor",
+    "slug": "wearable-athlete-monitoring",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "newArchEnabled": false,
+    "scheme": "athletemonitor",
+    "android": {
+      "package": "com.athletemonitor.app"
+    },
+    "plugins": [
+      [
+        "react-native-health-connect",
+        {
+          "readPermissions": [
+            "HeartRate",
+            "HeartRateVariabilityRmssd",
+            "RestingHeartRate",
+            "Steps",
+            "SleepSession",
+            "ExerciseSession",
+            "OxygenSaturation",
+            "Vo2Max"
+          ]
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26,
+            "kotlinVersion": "1.9.25"
+          }
+        }
+      ],
+      "expo-asset"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+# Development overrides - hot reload and volume mounts
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  backend:
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
+    volumes:
+      - ./backend:/app
+    environment:
+      DEBUG: "true"
+
+  celery-worker:
+    command: celery -A app.tasks.celery_app worker --loglevel=debug
+    volumes:
+      - ./backend:/app
+
+  celery-beat:
+    command: celery -A app.tasks.celery_app beat --loglevel=debug
+    volumes:
+      - ./backend:/app
