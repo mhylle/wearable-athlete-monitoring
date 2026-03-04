@@ -42,9 +42,9 @@ export function MetricLineChart({ data, label, unit, color, isTime }: MetricLine
   }
 
   const chartData = data.map((d) => ({
-    date: new Date(d.date).toLocaleDateString("en-US", {
-      month: "short",
+    date: new Date(d.date).toLocaleDateString("da-DK", {
       day: "numeric",
+      month: "short",
     }),
     avg: d.avg,
     min: d.min,

@@ -20,7 +20,7 @@ export function ACWRChart({ data }: ACWRChartProps) {
   }
 
   const chartData = data.map((d) => ({
-    date: new Date(d.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+    date: new Date(d.date).toLocaleDateString("da-DK", { day: "numeric", month: "short" }),
     acwr: d.acwr_value,
   }));
 

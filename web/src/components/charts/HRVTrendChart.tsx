@@ -19,7 +19,7 @@ export function HRVTrendChart({ data }: HRVTrendChartProps) {
   }
 
   const chartData = data.daily_values.map((d) => ({
-    date: new Date(d.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+    date: new Date(d.date).toLocaleDateString("da-DK", { day: "numeric", month: "short" }),
     rmssd: d.rmssd,
   }));
 

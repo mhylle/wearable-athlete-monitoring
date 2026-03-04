@@ -60,6 +60,7 @@ export function LoginScreen() {
           keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
+          autoFocus
           value={email}
           onChangeText={setEmail}
           returnKeyType="next"

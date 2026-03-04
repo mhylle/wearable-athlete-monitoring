@@ -38,7 +38,7 @@ export function AthleteWellnessDetail() {
   );
 
   const chartData = sortedEntries.map((e) => ({
-    date: new Date(e.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+    date: new Date(e.date).toLocaleDateString("da-DK", { day: "numeric", month: "short" }),
     mood: e.mood,
     soreness: e.soreness,
     fatigue: e.fatigue,

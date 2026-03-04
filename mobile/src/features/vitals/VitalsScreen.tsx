@@ -83,12 +83,17 @@ function MetricCard({ config, available }: { config: MetricConfig; available: bo
   const fmtVal = (v: number) =>
     isTime ? formatMinutes(v) : `${v.toFixed(config.key === 'steps' ? 0 : 1)} ${config.unit}`;
 
-  // Show at most 14 labels on x-axis
   const labels = points.map((p: DailyMetricDataPoint) => {
     const d = new Date(p.date);
-    return `${d.getMonth() + 1}/${d.getDate()}`;
+    return `${d.getDate()}/${d.getMonth() + 1}`;
   });
   const chartData = points.map((p: DailyMetricDataPoint) => p.avg);
+
+  // Show ~7 labels but always include the last one
+  const step = Math.ceil(labels.length / 7);
+  const visibleLabels = labels.map((label, i) =>
+    i % step === 0 || i === labels.length - 1 ? label : '',
+  );
 
   return (
     <View style={styles.card}>
@@ -101,7 +106,7 @@ function MetricCard({ config, available }: { config: MetricConfig; available: bo
 
       <LineChart
         data={{
-          labels: labels.filter((_, i) => i % Math.ceil(labels.length / 7) === 0),
+          labels: visibleLabels,
           datasets: [{ data: chartData, color: () => config.color, strokeWidth: 2 }],
         }}
         width={CHART_WIDTH}

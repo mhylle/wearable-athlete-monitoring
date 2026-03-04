@@ -22,7 +22,7 @@ export function SleepChart({ data }: SleepChartProps) {
   const chartData = data.map((d) => {
     const lightMinutes = d.total_minutes - d.deep_minutes - d.rem_minutes;
     return {
-      date: new Date(d.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      date: new Date(d.date).toLocaleDateString("da-DK", { day: "numeric", month: "short" }),
       deep: Math.round(d.deep_minutes / 60 * 10) / 10,
       rem: Math.round(d.rem_minutes / 60 * 10) / 10,
       light: Math.round(Math.max(0, lightMinutes) / 60 * 10) / 10,
