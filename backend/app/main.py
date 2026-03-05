@@ -4,6 +4,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.analytics_router import analytics_router
+from app.api.fitness_router import fitness_router
+from app.api.llm_router import llm_router
 from app.api.metrics_router import metrics_router
 from app.api.athlete_router import athlete_router
 from app.api.health_data_router import router as health_data_router
@@ -45,6 +47,8 @@ def create_app() -> FastAPI:
     app.include_router(health_data_router)
     app.include_router(analytics_router)
     app.include_router(metrics_router)
+    app.include_router(fitness_router)
+    app.include_router(llm_router)
 
     @app.get("/health")
     async def health_check() -> dict[str, str]:

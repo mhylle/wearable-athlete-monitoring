@@ -136,3 +136,47 @@ export interface TeamRecoveryOverview {
   athlete_name: string;
   total_score: number;
 }
+
+// Fitness Score & Trends
+
+export interface TrendResult {
+  metric_type: string;
+  direction: "improving" | "stable" | "declining";
+  z_score: number;
+  is_anomaly: boolean;
+  window_days: number;
+}
+
+export interface FitnessScore {
+  total: number | null;
+  components: Record<string, number>;
+  available_components: string[];
+  computed_at: string;
+}
+
+export interface AthleteFitness {
+  athlete_id: string;
+  fitness_score: FitnessScore;
+  trends: TrendResult[];
+  date: string;
+}
+
+export interface TeamAthleteFitness {
+  athlete_id: string;
+  full_name: string;
+  fitness_score: FitnessScore;
+  trends: TrendResult[];
+}
+
+export interface TeamFitness {
+  athletes: TeamAthleteFitness[];
+  date: string;
+}
+
+// LLM Analysis
+
+export interface LLMAnalysisState {
+  status: "pending" | "streaming" | "complete" | "error";
+  text: string;
+  cached?: boolean;
+}

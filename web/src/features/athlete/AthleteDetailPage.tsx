@@ -7,6 +7,7 @@ import {
   useAthleteRecovery,
   useAthleteAvailableMetrics,
   useAthleteMetricSeries,
+  useAthleteFitness,
 } from "@/api/hooks/useAnalytics";
 import { MetricLineChart } from "@/components/charts/MetricLineChart";
 import { useAthleteAnomalies } from "@/api/hooks/useAnomalies";
@@ -18,6 +19,8 @@ import { RecoveryChart } from "@/components/charts/RecoveryChart";
 import { ZoneBadge } from "@/components/ui/ZoneBadge";
 import { MetricValue } from "@/components/ui/MetricValue";
 import { AnomalyCard } from "@/components/ui/AnomalyCard";
+import { FitnessScoreCard } from "@/components/cards/FitnessScoreCard";
+import { TrendIndicator } from "@/components/ui/TrendIndicator";
 
 const TIME_METRICS = new Set(["sleep_total", "sleep_light"]);
 
@@ -32,19 +35,23 @@ const VITALS_CONFIGS = [
   { key: "vo2_max", label: "VO2 Max", unit: "ml/kg/min", color: "#ec4899" },
 ];
 
-function VitalCard({ athleteId, metricKey, label, unit, color }: {
+function VitalCard({ athleteId, metricKey, label, unit, color, trend }: {
   athleteId: string;
   metricKey: string;
   label: string;
   unit: string;
   color: string;
+  trend?: "improving" | "stable" | "declining";
 }) {
   const { data } = useAthleteMetricSeries(athleteId, metricKey, 30);
   const points = data?.data ?? [];
 
   return (
     <section className="rounded-xl border border-gray-200 bg-white p-5">
-      <h2 className="mb-4 text-sm font-semibold text-gray-900">{label} (30-day)</h2>
+      <div className="mb-4 flex items-center gap-2">
+        <h2 className="text-sm font-semibold text-gray-900">{label} (30-day)</h2>
+        {trend && <TrendIndicator direction={trend} />}
+      </div>
       <MetricLineChart data={points} label={label} unit={unit} color={color} isTime={TIME_METRICS.has(metricKey)} />
     </section>
   );
@@ -63,6 +70,7 @@ export function AthleteDetailPage() {
   const { data: anomalies } = useAthleteAnomalies(athleteId);
   const { data: wellness } = useAthleteWellness(athleteId);
   const { data: availableMetrics } = useAthleteAvailableMetrics(athleteId);
+  const { data: fitnessData } = useAthleteFitness(athleteId);
 
   if (isLoading) {
     return <p className="py-12 text-center text-sm text-gray-500">Loading athlete...</p>;
@@ -92,6 +100,11 @@ export function AthleteDetailPage() {
         </div>
         {latestACWR && <ZoneBadge zone={latestACWR.zone} />}
       </div>
+
+      {/* Fitness Score */}
+      {fitnessData && fitnessData.fitness_score.total !== null && (
+        <FitnessScoreCard data={fitnessData} />
+      )}
 
       {/* Metrics summary */}
       <div className="grid grid-cols-2 gap-4 rounded-xl border border-gray-200 bg-white p-5 sm:grid-cols-4">
@@ -142,16 +155,20 @@ export function AthleteDetailPage() {
           <h2 className="mb-3 text-sm font-semibold text-gray-900">Vitals</h2>
           <div className="grid gap-6 lg:grid-cols-2">
             {VITALS_CONFIGS.filter((c) => availableMetrics.metric_types.includes(c.key)).map(
-              (config) => (
-                <VitalCard
-                  key={config.key}
-                  athleteId={athleteId}
-                  metricKey={config.key}
-                  label={config.label}
-                  unit={config.unit}
-                  color={config.color}
-                />
-              )
+              (config) => {
+                const trend = fitnessData?.trends.find((t) => t.metric_type === config.key);
+                return (
+                  <VitalCard
+                    key={config.key}
+                    athleteId={athleteId}
+                    metricKey={config.key}
+                    label={config.label}
+                    unit={config.unit}
+                    color={config.color}
+                    trend={trend?.direction}
+                  />
+                );
+              }
             )}
           </div>
         </section>

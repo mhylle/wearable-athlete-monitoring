@@ -25,6 +25,11 @@ class Settings(BaseSettings):
     # Sync
     SYNC_INTERVAL_MINUTES: int = 60
 
+    # Ollama (LLM)
+    OLLAMA_BASE_URL: str = "http://host.docker.internal:11434"
+    OLLAMA_MODEL: str = "mistral-nemo:latest"
+    LLM_CACHE_TTL_SECONDS: int = 3600
+
     # App
     APP_VERSION: str = "0.1.0"
     DEBUG: bool = False

@@ -7,6 +7,8 @@ import type {
   RecoveryScore,
   TeamACWROverview,
   TeamRecoveryOverview,
+  AthleteFitness,
+  TeamFitness,
 } from "@/types/api";
 
 export function useAthleteACWR(id: string) {
@@ -151,6 +153,34 @@ export function useAthleteMetricSeries(id: string, metricType: string, days: num
       return response.data;
     },
     enabled: !!id && !!metricType,
+  });
+}
+
+// ---------- Fitness endpoints ----------
+
+export function useAthleteFitness(id: string) {
+  return useQuery<AthleteFitness>({
+    queryKey: ["fitness", "athlete", id],
+    queryFn: async () => {
+      const response = await apiClient.get<AthleteFitness>(
+        `/api/v1/fitness/athlete/${id}`
+      );
+      return response.data;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useTeamFitness(teamId: string) {
+  return useQuery<TeamFitness>({
+    queryKey: ["fitness", "team", teamId],
+    queryFn: async () => {
+      const response = await apiClient.get<TeamFitness>(
+        `/api/v1/fitness/team/${teamId}`
+      );
+      return response.data;
+    },
+    enabled: !!teamId,
   });
 }
 

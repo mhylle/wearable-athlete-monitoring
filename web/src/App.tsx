@@ -12,6 +12,7 @@ import { AnomalyFeed } from "@/features/anomalies/AnomalyFeed";
 import { WellnessOverviewPage } from "@/features/wellness/WellnessOverviewPage";
 import { AthleteWellnessDetail } from "@/features/wellness/AthleteWellnessDetail";
 import { MyVitalsPage } from "@/features/vitals/MyVitalsPage";
+import { AIInsightsPage } from "@/features/insights/AIInsightsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +40,8 @@ export default function App() {
                 <Route path="wellness" element={<WellnessOverviewPage />} />
                 <Route path="wellness/:athleteId" element={<AthleteWellnessDetail />} />
                 <Route path="my-vitals" element={<MyVitalsPage />} />
+                <Route path="insights" element={<AIInsightsPage />} />
+                <Route path="insights/:athleteId" element={<AIInsightsPage />} />
                 <Route path="anomalies" element={<AnomalyFeed />} />
               </Route>
             </Route>
